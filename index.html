@@ -322,31 +322,30 @@
             background: #FFD700;
         }
         
-        /* Panel de navegación móvil - Convertido a dropdown vertical */
+        /* Panel de navegación móvil - Dropdown vertical simplificado */
         .mobile-nav {
-            display: none;
             position: absolute;
             top: 100%; /* Justo debajo del header */
             right: 10px; /* Alineado con el botón hamburguesa */
             width: 200px; /* Más compacto */
-            max-height: 0; /* Inicia cerrado */
             background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(15px);
             z-index: 1000;
-            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
-            overflow: hidden;
             border-radius: 12px;
             border: 2px solid #FFD700;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            
+            /* Estados de visibilidad */
+            visibility: hidden;
             opacity: 0;
-            transform: translateY(-10px); /* Inicia ligeramente arriba */
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .mobile-nav.active {
-            display: block;
-            max-height: 400px; /* Altura suficiente para 7 elementos */
+            visibility: visible;
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
         
         .mobile-nav ul {
@@ -502,10 +501,15 @@
                 position: relative; /* Para el dropdown positioning */
             }
             
-            /* Contenedor del dropdown */
+            /* Contenedor del dropdown - posicionamiento relativo al header */
+            header {
+                position: relative; /* IMPORTANTE para el dropdown */
+            }
+            
             .mobile-nav {
                 position: absolute;
-                right: 0; /* Alineado al botón */
+                right: 10px; /* Alineado al botón */
+                top: 100%; /* Justo debajo del header */
             }
             
             /* Centrado robusto para móvil en todos los niveles de zoom */
@@ -1299,22 +1303,25 @@
             breakdown.style.transform = 'translateY(10px)';
         }
 
-        // Funciones para el menú dropdown móvil (convertido de hamburguesa lateral)
+        // Funciones para el menú dropdown móvil (simplificado)
         function toggleMobileMenu() {
             const menuToggle = document.querySelector('.menu-toggle');
             const mobileNav = document.querySelector('.mobile-nav');
             const overlay = document.querySelector('.mobile-nav-overlay');
             
-            // Toggle active classes
-            menuToggle.classList.toggle('active');
-            mobileNav.classList.toggle('active');
-            overlay.classList.toggle('active');
+            console.log('Toggle menu clicked'); // Debug
             
-            // Manejo del overlay para dropdown (no bloquea scroll del body)
-            if (mobileNav.classList.contains('active')) {
-                overlay.style.display = 'block';
+            // Toggle active classes
+            const isActive = mobileNav.classList.contains('active');
+            
+            if (isActive) {
+                closeMobileMenu();
             } else {
-                overlay.style.display = 'none';
+                // Abrir menú
+                menuToggle.classList.add('active');
+                mobileNav.classList.add('active');
+                overlay.classList.add('active');
+                overlay.style.display = 'block';
             }
         }
 
@@ -1323,45 +1330,54 @@
             const mobileNav = document.querySelector('.mobile-nav');
             const overlay = document.querySelector('.mobile-nav-overlay');
             
+            console.log('Closing menu'); // Debug
+            
             // Remove active classes
             menuToggle.classList.remove('active');
             mobileNav.classList.remove('active');
             overlay.classList.remove('active');
             
-            // Hide overlay
-            overlay.style.display = 'none';
+            // Hide overlay after animation
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
         }
 
-        // Cerrar menú dropdown con ESC
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                const modal = document.getElementById('modal-overlay');
-                if (modal.classList.contains('open')) {
-                    closeModal();
-                } else {
-                    const mobileNav = document.querySelector('.mobile-nav');
-                    if (mobileNav.classList.contains('active')) {
-                        closeMobileMenu();
+        // Event listeners para el dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cerrar menú dropdown con ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    const modal = document.getElementById('modal-overlay');
+                    if (modal && modal.classList.contains('open')) {
+                        closeModal();
+                    } else {
+                        const mobileNav = document.querySelector('.mobile-nav');
+                        if (mobileNav && mobileNav.classList.contains('active')) {
+                            closeMobileMenu();
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        // Cerrar menú dropdown al redimensionar la ventana
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 800) {
-                closeMobileMenu();
-            }
-        });
+            // Cerrar menú dropdown al redimensionar la ventana
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 800) {
+                    closeMobileMenu();
+                }
+            });
 
-        // Cerrar dropdown al hacer click fuera del menú
-        document.addEventListener('click', (e) => {
-            const menuToggle = document.querySelector('.menu-toggle');
-            const mobileNav = document.querySelector('.mobile-nav');
-            
-            if (!menuToggle.contains(e.target) && !mobileNav.contains(e.target)) {
-                closeMobileMenu();
-            }
+            // Cerrar dropdown al hacer click fuera del menú
+            document.addEventListener('click', (e) => {
+                const menuToggle = document.querySelector('.menu-toggle');
+                const mobileNav = document.querySelector('.mobile-nav');
+                
+                if (menuToggle && mobileNav && 
+                    !menuToggle.contains(e.target) && 
+                    !mobileNav.contains(e.target)) {
+                    closeMobileMenu();
+                }
+            });
         });
     </script>
 </body>
