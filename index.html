@@ -343,9 +343,10 @@
         }
         
         .mobile-nav.active {
-            visibility: visible;
-            opacity: 1;
-            transform: translateY(0) scale(1);
+            visibility: visible !important;
+            opacity: 1 !important;
+            transform: translateY(0) scale(1) !important;
+            display: block !important; /* Forzar visibilidad */
         }
         
         .mobile-nav ul {
@@ -1307,44 +1308,62 @@
             breakdown.style.transform = 'translateY(10px)';
         }
 
-        // Funciones para el menú dropdown móvil (con mejor debugging)
+        // Funciones para el menú dropdown móvil (versión robusta con debugging)
         function toggleMobileMenu() {
-            console.log('🍔 Toggle menu clicked'); // Debug
+            console.log('🍔 CLICK en botón hamburguesa detectado');
             
             const menuToggle = document.querySelector('.menu-toggle');
             const mobileNav = document.querySelector('.mobile-nav');
             const overlay = document.querySelector('.mobile-nav-overlay');
             
+            console.log('🔍 Verificando elementos del DOM:');
+            console.log('  - Botón hamburguesa:', menuToggle ? '✅ Encontrado' : '❌ No encontrado');
+            console.log('  - Panel móvil:', mobileNav ? '✅ Encontrado' : '❌ No encontrado');
+            console.log('  - Overlay:', overlay ? '✅ Encontrado' : '❌ No encontrado');
+            
             if (!menuToggle || !mobileNav || !overlay) {
-                console.error('❌ No se encontraron elementos del menú');
+                console.error('❌ ERROR: Faltan elementos del menú móvil');
+                console.log('🔧 Intentando crear elementos faltantes...');
                 return;
+            }
+            
+            // Verificar ancho de pantalla
+            console.log('📱 Ancho de pantalla:', window.innerWidth + 'px');
+            if (window.innerWidth > 800) {
+                console.warn('⚠️ ADVERTENCIA: Menú móvil activado en pantalla desktop');
             }
             
             // Toggle active classes
             const isActive = mobileNav.classList.contains('active');
-            console.log('📱 Estado actual del menú:', isActive ? 'abierto' : 'cerrado');
+            console.log('📱 Estado actual del menú:', isActive ? '🟢 ABIERTO' : '🔴 CERRADO');
             
             if (isActive) {
                 closeMobileMenu();
             } else {
-                // Abrir menú
-                console.log('📂 Abriendo menú dropdown');
+                console.log('📂 ➡️ Abriendo menú dropdown');
+                
+                // Agregar clases activas
                 menuToggle.classList.add('active');
                 mobileNav.classList.add('active');
                 overlay.classList.add('active');
                 overlay.style.display = 'block';
+                
+                console.log('✅ Clases aplicadas:');
+                console.log('  - menuToggle.active:', menuToggle.classList.contains('active'));
+                console.log('  - mobileNav.active:', mobileNav.classList.contains('active'));
+                console.log('  - overlay.active:', overlay.classList.contains('active'));
             }
         }
 
         function closeMobileMenu() {
-            console.log('❌ Cerrando menú dropdown');
+            console.log('❌ ➡️ Cerrando menú dropdown');
             
             const menuToggle = document.querySelector('.menu-toggle');
             const mobileNav = document.querySelector('.mobile-nav');
             const overlay = document.querySelector('.mobile-nav-overlay');
             
             if (!menuToggle || !mobileNav || !overlay) {
-                console.error('❌ No se encontraron elementos para cerrar el menú');
+                console.error('❌ ERROR: No se encontraron elementos para cerrar el menú');
                 return;
             }
             
@@ -1353,14 +1372,30 @@
             mobileNav.classList.remove('active');
             overlay.classList.remove('active');
             
+            console.log('✅ Menú cerrado correctamente');
+            
             // Hide overlay after animation
             setTimeout(() => {
                 overlay.style.display = 'none';
+                console.log('🫥 Overlay ocultado');
             }, 300);
         }
 
         // Event listeners para el dropdown
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM cargado - Inicializando menú móvil');
+            
+            // Verificar que existen los elementos
+            const menuToggle = document.querySelector('.menu-toggle');
+            const mobileNav = document.querySelector('.mobile-nav');
+            const overlay = document.querySelector('.mobile-nav-overlay');
+            
+            console.log('🔍 Elementos encontrados:', {
+                menuToggle: !!menuToggle,
+                mobileNav: !!mobileNav,
+                overlay: !!overlay
+            });
+            
             // Cerrar menú dropdown con ESC
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
