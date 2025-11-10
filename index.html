@@ -267,41 +267,59 @@
         /* Menú Hamburguesa - Estilos base */
         .menu-toggle {
             display: none;
-            background: none;
-            border: none;
+            background: rgba(255, 215, 0, 0.15); /* Fondo dorado sutil */
+            border: 2px solid rgba(255, 215, 0, 0.3);
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
             padding: 8px;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+            border-radius: 6px;
+            transition: all 0.3s;
+            width: 44px; /* Tamaño táctil óptimo */
+            height: 44px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
         }
         
         .menu-toggle:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 215, 0, 0.25);
+            border-color: #FFD700;
+            transform: scale(1.05);
         }
         
         .menu-toggle span {
             display: block;
-            width: 25px;
+            width: 22px;
             height: 3px;
             background: white;
-            margin: 5px 0;
-            transition: 0.3s;
+            margin: 0;
+            transition: all 0.3s ease;
             border-radius: 2px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* Sombra para mejor definición */
         }
         
-        /* Animación del hamburger a X */
+        /* Animación del hamburger a X mejorada */
+        .menu-toggle.active {
+            background: rgba(255, 215, 0, 0.3);
+            border-color: #FFD700;
+        }
+        
         .menu-toggle.active span:nth-child(1) {
-            transform: rotate(-45deg) translate(-5px, 6px);
+            transform: rotate(45deg) translate(5px, 5px);
+            background: #FFD700;
         }
         
         .menu-toggle.active span:nth-child(2) {
             opacity: 0;
+            transform: scale(0);
         }
         
         .menu-toggle.active span:nth-child(3) {
-            transform: rotate(45deg) translate(-5px, -6px);
+            transform: rotate(-45deg) translate(7px, -6px);
+            background: #FFD700;
         }
         
         /* Panel de navegación móvil */
@@ -310,14 +328,15 @@
             position: fixed;
             top: 0;
             right: -100%;
-            width: 280px;
+            width: 250px; /* Reducido de 280px para mejor proporción */
             height: 100vh;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.92); /* Menos transparente para mejor legibilidad */
+            backdrop-filter: blur(15px);
             z-index: 1000;
             transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             padding-top: 80px;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+            box-shadow: -8px 0 25px rgba(0, 0, 0, 0.4);
+            border-left: 2px solid #FFD700; /* Borde dorado distintivo */
         }
         
         .mobile-nav.active {
@@ -326,44 +345,50 @@
         
         .mobile-nav ul {
             list-style: none;
-            padding: 0;
+            padding: 20px 0;
             margin: 0;
         }
         
         .mobile-nav li {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Separadores dorados suaves */
+            margin: 0 15px; /* Márgenes laterales para mejor diseño */
         }
         
         .mobile-nav a {
             display: block;
-            color: white;
+            color: #ffffff; /* Blanco puro para máximo contraste */
             text-decoration: none;
-            padding: 20px 30px;
-            font-size: 1.1rem;
+            padding: 18px 20px;
+            font-size: 1.2rem; /* Ligeramente más grande */
+            font-weight: 500; /* Semi-bold para mejor legibilidad */
             transition: all 0.3s;
             position: relative;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Sombra de texto para claridad */
         }
         
-        .mobile-nav a:hover {
-            background: rgba(255, 215, 0, 0.1);
+        .mobile-nav a:hover,
+        .mobile-nav a:focus {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1));
             color: #FFD700;
-            padding-left: 40px;
+            padding-left: 30px;
+            border-radius: 8px;
+            transform: translateX(5px); /* Efecto de deslizamiento */
         }
         
         .mobile-nav a::before {
-            content: '';
+            content: '▶'; /* Icono de flecha */
             position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 4px;
-            background: #FFD700;
-            transform: scaleY(0);
-            transition: transform 0.3s;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #FFD700;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
         
         .mobile-nav a:hover::before {
-            transform: scaleY(1);
+            opacity: 1;
         }
         
         /* Overlay para cerrar menú */
@@ -374,10 +399,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.4); /* Menos opaco para mejor visibilidad del contenido */
             z-index: 999;
             opacity: 0;
             transition: opacity 0.3s;
+            backdrop-filter: blur(2px); /* Sutil blur del fondo */
         }
         
         .mobile-nav-overlay.active {
@@ -428,6 +454,7 @@
                 flex-direction: row;
                 width: 100%;
                 box-sizing: border-box;
+                align-items: center; /* Centrado vertical perfecto */
             }
             
             .header-top {
@@ -452,6 +479,15 @@
                 letter-spacing: 1px !important;
                 line-height: 1 !important;
                 margin: 0 !important;
+                flex-shrink: 0; /* Evitar que el título se comprima */
+            }
+            
+            /* Asegurar que el botón hamburguesa sea visible */
+            .menu-toggle {
+                display: flex !important; /* Override del display none */
+                flex-shrink: 0;
+                margin-left: 8px;
+                z-index: 1001; /* Por encima del panel de navegación */
             }
             
             /* Centrado robusto para móvil en todos los niveles de zoom */
