@@ -415,6 +415,9 @@
                 width: 100vw;
                 overflow-x: hidden;
                 position: relative;
+                margin: 0;
+                padding-left: 0;
+                padding-right: 0;
             } 
             
             header { 
@@ -423,49 +426,63 @@
                 min-height: 60px;
                 justify-content: space-between;
                 flex-direction: row;
+                width: 100%;
+                box-sizing: border-box;
             }
             
             .header-top {
                 flex: 1;
                 justify-content: flex-start;
+                width: auto;
             }
             
             .header-brand {
-                gap: 10px; /* reducir espacio entre logo y título en móvil */
+                gap: 12px; /* espacio balanceado entre logo y título */
+                align-items: center;
+                white-space: nowrap;
             }
             
             .header-logo { 
-                height: 35px; 
+                height: 40px; /* incrementar ligeramente para balance visual */
+                flex-shrink: 0;
             }
             
-            header h1 { 
-                font-size: 1rem; 
-                line-height: 1;
+            .cinematic-title { 
+                font-size: 1.8rem !important; /* título más prominente */
+                letter-spacing: 1px !important;
+                line-height: 1 !important;
+                margin: 0 !important;
             }
             
             /* Centrado robusto para móvil en todos los niveles de zoom */
             section, .hero {
-                padding-left: 15px;
-                padding-right: 15px;
+                padding-left: 12px;
+                padding-right: 12px;
                 width: 100%;
+                box-sizing: border-box;
+                margin: 0 auto;
+            }
+            
+            .card, .accordion, .action {
+                width: calc(100% - 24px);
+                max-width: none;
+                margin: 16px auto;
                 box-sizing: border-box;
             }
             
-            .card, .accordion, .action, .slider {
-                width: 100%;
-                max-width: none;
-                margin-left: 0;
-                margin-right: 0;
+            .slider {
+                width: calc(100% - 24px);
+                margin: 20px auto;
                 box-sizing: border-box;
             }
             
             .section-title {
                 width: 100%;
                 text-align: center;
-                margin-left: 0;
-                margin-right: 0;
-                padding: 0 10px;
+                margin: 20px auto 32px;
+                padding: 0 12px;
                 box-sizing: border-box;
+                font-size: 1.8em;
             }
             
             /* Mejoras específicas para centrado de contenido */
@@ -474,32 +491,54 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                padding: 40px 12px;
             }
             
             .hero div {
                 width: 100%;
                 max-width: 100%;
-                padding: 0 10px;
+                padding: 0;
                 box-sizing: border-box;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+                margin-bottom: 16px;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+                line-height: 1.4;
+                margin-bottom: 24px;
+            }
+            
+            /* Video responsive en móvil */
+            .video-container {
+                max-width: calc(100vw - 48px);
+                margin: 20px auto;
             }
             
             /* Asegurar que los formularios se vean bien */
             .accordion-content .card-like {
                 margin: 0;
                 padding: 10px;
+                width: 100%;
+                box-sizing: border-box;
             }
             
-            /* Slider responsive */
+            /* Slider responsive mejorado */
             .slider {
                 flex-direction: column;
                 align-items: center;
                 gap: 16px;
+                padding: 16px 0;
             }
             
             .slider-item {
                 max-width: 100%;
                 width: 100%;
                 margin: 0;
+                box-sizing: border-box;
             }
         }
         
@@ -615,6 +654,65 @@
             position: relative;
             z-index: 2;
         }
+
+        /* Container responsive para videos de YouTube */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 56.25%; /* Aspect ratio 16:9 (9/16 = 0.5625) */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+        }
+        
+        /* Estilo cinematográfico para el título EKINE */
+        .cinematic-title {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 2.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FF6B35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 3px;
+            margin: 0;
+            position: relative;
+        }
+        
+        .cinematic-title::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -10px;
+            right: -10px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+            transform: translateY(-50%);
+            opacity: 0.6;
+            z-index: -1;
+        }
+        
+        /* Ajuste para móvil del título */
+        @media (max-width: 800px) {
+            .cinematic-title {
+                font-size: 2.2rem;
+                letter-spacing: 2px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -627,7 +725,7 @@
         <div class="header-top">
             <div class="header-brand">
                 <img src="logo.png" alt="Logo EKINE" class="header-logo">
-                <h1>EKINE</h1>
+                <h1 class="cinematic-title">EKINE</h1>
             </div>
         </div>
         
@@ -713,8 +811,8 @@
         <div class="card">
             <h3>Beneficios Emocionales</h3>
             <p>Inmortalización mediante cortometrajes, clips para RSE (Responsabilidad Social Empresarial) y máxima visibilidad global.</p>
-            <div style="text-align: center;">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/lWciuWN-Qmc" title="Misión de la Producción del Film" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/lWciuWN-Qmc" title="Misión de la Producción del Film" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
     </section>
