@@ -250,12 +250,21 @@
             z-index: 0;
             pointer-events: none;
         }
-    .watermark-img { width:100%; height:auto; display:block; filter: saturate(0.95); }
+    .watermark-img { 
+        width: 100%; 
+        height: auto; 
+        display: block; 
+        filter: saturate(0.95); 
+        object-fit: contain; /* Mantener proporciones de la marca de agua */
+        opacity: 0.8; /* Ligeramente más visible para el nuevo logo */
+    }
     /* Header branding: logo a la izquierda del título, centrados juntos */
     .header-logo { 
         height: 50px; /* tamaño apropiado para buena visibilidad */
         width: auto; 
-        z-index: 110; 
+        z-index: 110;
+        object-fit: contain; /* Mantiene proporciones del JPG */
+        border-radius: 4px; /* Bordes ligeramente redondeados para el JPG */
     }
     header h1 { 
         margin: 0; 
@@ -503,6 +512,8 @@
             .header-logo { 
                 height: 40px; /* incrementar ligeramente para balance visual */
                 flex-shrink: 0;
+                object-fit: contain; /* Mantener proporciones en móvil */
+                border-radius: 3px; /* Bordes redondeados para móvil */
             }
             
             .cinematic-title { 
@@ -797,13 +808,13 @@
 <body>
     <!-- Marca de agua SVG: baja opacidad, centrada como fondo decorativo -->
     <div class="watermark" aria-hidden="true">
-        <!-- Marca de agua: usar el logo proporcionado por el usuario -->
-        <img src="logo.png" alt="EKINE logo" class="watermark-img">
+        <!-- Marca de agua: usar el nuevo logo EKINE -->
+        <img src="ekine logo.jpg" alt="EKINE logo" class="watermark-img">
     </div>
     <header>
         <div class="header-top">
             <div class="header-brand">
-                <img src="logo.png" alt="Logo EKINE" class="header-logo">
+                <img src="ekine logo.jpg" alt="Logo EKINE" class="header-logo">
                 <h1 class="cinematic-title">EKINE</h1>
             </div>
         </div>
