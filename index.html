@@ -322,67 +322,78 @@
             background: #FFD700;
         }
         
-        /* Panel de navegación móvil */
+        /* Panel de navegación móvil - Convertido a dropdown vertical */
         .mobile-nav {
             display: none;
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 250px; /* Reducido de 280px para mejor proporción */
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.92); /* Menos transparente para mejor legibilidad */
+            position: absolute;
+            top: 100%; /* Justo debajo del header */
+            right: 10px; /* Alineado con el botón hamburguesa */
+            width: 200px; /* Más compacto */
+            max-height: 0; /* Inicia cerrado */
+            background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(15px);
             z-index: 1000;
-            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            padding-top: 80px;
-            box-shadow: -8px 0 25px rgba(0, 0, 0, 0.4);
-            border-left: 2px solid #FFD700; /* Borde dorado distintivo */
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 2px solid #FFD700;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transform: translateY(-10px); /* Inicia ligeramente arriba */
         }
         
         .mobile-nav.active {
-            right: 0;
+            display: block;
+            max-height: 400px; /* Altura suficiente para 7 elementos */
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .mobile-nav ul {
             list-style: none;
-            padding: 20px 0;
+            padding: 10px 0;
             margin: 0;
         }
         
         .mobile-nav li {
-            border-bottom: 1px solid rgba(255, 215, 0, 0.2); /* Separadores dorados suaves */
-            margin: 0 15px; /* Márgenes laterales para mejor diseño */
+            border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+            margin: 0 8px;
+        }
+        
+        .mobile-nav li:last-child {
+            border-bottom: none; /* Quitar borde del último elemento */
         }
         
         .mobile-nav a {
             display: block;
-            color: #ffffff; /* Blanco puro para máximo contraste */
+            color: #ffffff;
             text-decoration: none;
-            padding: 18px 20px;
-            font-size: 1.2rem; /* Ligeramente más grande */
-            font-weight: 500; /* Semi-bold para mejor legibilidad */
+            padding: 12px 16px; /* Padding más compacto */
+            font-size: 1rem; /* Tamaño optimizado */
+            font-weight: 500;
             transition: all 0.3s;
             position: relative;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Sombra de texto para claridad */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+            margin: 2px 0; /* Separación entre elementos */
         }
         
         .mobile-nav a:hover,
         .mobile-nav a:focus {
             background: linear-gradient(90deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1));
             color: #FFD700;
-            padding-left: 30px;
-            border-radius: 8px;
-            transform: translateX(5px); /* Efecto de deslizamiento */
+            padding-left: 24px;
+            transform: translateX(4px);
         }
         
         .mobile-nav a::before {
-            content: '▶'; /* Icono de flecha */
+            content: '▶';
             position: absolute;
             left: 8px;
             top: 50%;
             transform: translateY(-50%);
             color: #FFD700;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             opacity: 0;
             transition: opacity 0.3s;
         }
@@ -391,7 +402,7 @@
             opacity: 1;
         }
         
-        /* Overlay para cerrar menú */
+        /* Overlay para cerrar menú dropdown */
         .mobile-nav-overlay {
             display: none;
             position: fixed;
@@ -399,11 +410,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4); /* Menos opaco para mejor visibilidad del contenido */
+            background: transparent; /* Transparente para dropdown */
             z-index: 999;
             opacity: 0;
             transition: opacity 0.3s;
-            backdrop-filter: blur(2px); /* Sutil blur del fondo */
         }
         
         .mobile-nav-overlay.active {
@@ -455,6 +465,7 @@
                 width: 100%;
                 box-sizing: border-box;
                 align-items: center; /* Centrado vertical perfecto */
+                position: relative; /* Necesario para el dropdown */
             }
             
             .header-top {
@@ -488,6 +499,13 @@
                 flex-shrink: 0;
                 margin-left: 8px;
                 z-index: 1001; /* Por encima del panel de navegación */
+                position: relative; /* Para el dropdown positioning */
+            }
+            
+            /* Contenedor del dropdown */
+            .mobile-nav {
+                position: absolute;
+                right: 0; /* Alineado al botón */
             }
             
             /* Centrado robusto para móvil en todos los niveles de zoom */
@@ -1281,7 +1299,7 @@
             breakdown.style.transform = 'translateY(10px)';
         }
 
-        // Funciones para el menú hamburguesa móvil
+        // Funciones para el menú dropdown móvil (convertido de hamburguesa lateral)
         function toggleMobileMenu() {
             const menuToggle = document.querySelector('.menu-toggle');
             const mobileNav = document.querySelector('.mobile-nav');
@@ -1292,12 +1310,10 @@
             mobileNav.classList.toggle('active');
             overlay.classList.toggle('active');
             
-            // Prevent body scroll when menu is open
+            // Manejo del overlay para dropdown (no bloquea scroll del body)
             if (mobileNav.classList.contains('active')) {
-                document.body.style.overflow = 'hidden';
                 overlay.style.display = 'block';
             } else {
-                document.body.style.overflow = '';
                 overlay.style.display = 'none';
             }
         }
@@ -1312,12 +1328,11 @@
             mobileNav.classList.remove('active');
             overlay.classList.remove('active');
             
-            // Restore body scroll
-            document.body.style.overflow = '';
+            // Hide overlay
             overlay.style.display = 'none';
         }
 
-        // Cerrar menú móvil con ESC
+        // Cerrar menú dropdown con ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 const modal = document.getElementById('modal-overlay');
@@ -1332,9 +1347,19 @@
             }
         });
 
-        // Cerrar menú móvil al redimensionar la ventana (si se pasa de móvil a desktop)
+        // Cerrar menú dropdown al redimensionar la ventana
         window.addEventListener('resize', () => {
             if (window.innerWidth > 800) {
+                closeMobileMenu();
+            }
+        });
+
+        // Cerrar dropdown al hacer click fuera del menú
+        document.addEventListener('click', (e) => {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const mobileNav = document.querySelector('.mobile-nav');
+            
+            if (!menuToggle.contains(e.target) && !mobileNav.contains(e.target)) {
                 closeMobileMenu();
             }
         });
