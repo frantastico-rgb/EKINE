@@ -323,7 +323,6 @@
         
         /* Panel de navegación móvil - Dropdown vertical simplificado (SOLO MÓVIL) */
         .mobile-nav {
-            display: none; /* OCULTO por defecto en desktop */
             position: absolute;
             top: 100%; /* Justo debajo del header */
             right: 10px; /* Alineado con el botón hamburguesa */
@@ -335,18 +334,25 @@
             border: 2px solid #FFD700;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
             
-            /* Estados de visibilidad */
-            visibility: hidden;
-            opacity: 0;
-            transform: translateY(-10px) scale(0.95);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Estados de visibilidad - SIMPLIFICADO */
+            display: none; /* Oculto por defecto */
         }
         
         .mobile-nav.active {
-            visibility: visible !important;
-            opacity: 1 !important;
-            transform: translateY(0) scale(1) !important;
-            display: block !important; /* Forzar visibilidad */
+            display: block !important; /* Mostrar cuando está activo */
+            animation: dropdownSlide 0.3s ease-out;
+        }
+        
+        /* Animación de aparición */
+        @keyframes dropdownSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-10px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
         
         .mobile-nav ul {
@@ -446,6 +452,16 @@
             
             .mobile-nav {
                 display: block; /* Habilitar dropdown en móvil */
+                position: absolute;
+                top: 100%;
+                right: 10px;
+            }
+            
+            /* Forzar que esté visible cuando tenga clase active */
+            .mobile-nav.active {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
             }
             
             /* Optimización header móvil: mantener layout compacto */
@@ -1308,77 +1324,56 @@
             breakdown.style.transform = 'translateY(10px)';
         }
 
-        // Funciones para el menú dropdown móvil (versión robusta con debugging)
+        // Funciones para el menú dropdown móvil (versión súper simple)
         function toggleMobileMenu() {
-            console.log('🍔 CLICK en botón hamburguesa detectado');
+            console.log('🍔 CLICK en hamburguesa');
             
-            const menuToggle = document.querySelector('.menu-toggle');
             const mobileNav = document.querySelector('.mobile-nav');
-            const overlay = document.querySelector('.mobile-nav-overlay');
+            const menuToggle = document.querySelector('.menu-toggle');
             
-            console.log('🔍 Verificando elementos del DOM:');
-            console.log('  - Botón hamburguesa:', menuToggle ? '✅ Encontrado' : '❌ No encontrado');
-            console.log('  - Panel móvil:', mobileNav ? '✅ Encontrado' : '❌ No encontrado');
-            console.log('  - Overlay:', overlay ? '✅ Encontrado' : '❌ No encontrado');
-            
-            if (!menuToggle || !mobileNav || !overlay) {
-                console.error('❌ ERROR: Faltan elementos del menú móvil');
-                console.log('🔧 Intentando crear elementos faltantes...');
+            if (!mobileNav || !menuToggle) {
+                console.error('❌ Elementos no encontrados');
                 return;
             }
             
-            // Verificar ancho de pantalla
-            console.log('📱 Ancho de pantalla:', window.innerWidth + 'px');
-            if (window.innerWidth > 800) {
-                console.warn('⚠️ ADVERTENCIA: Menú móvil activado en pantalla desktop');
-            }
-            
-            // Toggle active classes
             const isActive = mobileNav.classList.contains('active');
-            console.log('📱 Estado actual del menú:', isActive ? '🟢 ABIERTO' : '🔴 CERRADO');
+            console.log('Estado actual:', isActive);
             
             if (isActive) {
-                closeMobileMenu();
+                // Cerrar
+                console.log('� Cerrando menú');
+                mobileNav.classList.remove('active');
+                menuToggle.classList.remove('active');
+                mobileNav.style.display = 'none';
             } else {
-                console.log('📂 ➡️ Abriendo menú dropdown');
-                
-                // Agregar clases activas
-                menuToggle.classList.add('active');
+                // Abrir
+                console.log('� Abriendo menú');
                 mobileNav.classList.add('active');
-                overlay.classList.add('active');
-                overlay.style.display = 'block';
+                menuToggle.classList.add('active');
+                mobileNav.style.display = 'block';
                 
-                console.log('✅ Clases aplicadas:');
-                console.log('  - menuToggle.active:', menuToggle.classList.contains('active'));
-                console.log('  - mobileNav.active:', mobileNav.classList.contains('active'));
-                console.log('  - overlay.active:', overlay.classList.contains('active'));
+                // Verificar que se aplicó
+                setTimeout(() => {
+                    console.log('Verificación:');
+                    console.log('- display:', getComputedStyle(mobileNav).display);
+                    console.log('- visibility:', getComputedStyle(mobileNav).visibility);
+                    console.log('- opacity:', getComputedStyle(mobileNav).opacity);
+                    console.log('- clase active:', mobileNav.classList.contains('active'));
+                }, 100);
             }
         }
 
         function closeMobileMenu() {
-            console.log('❌ ➡️ Cerrando menú dropdown');
+            console.log('❌ Cerrando menú (función)');
             
             const menuToggle = document.querySelector('.menu-toggle');
             const mobileNav = document.querySelector('.mobile-nav');
-            const overlay = document.querySelector('.mobile-nav-overlay');
             
-            if (!menuToggle || !mobileNav || !overlay) {
-                console.error('❌ ERROR: No se encontraron elementos para cerrar el menú');
-                return;
+            if (menuToggle && mobileNav) {
+                menuToggle.classList.remove('active');
+                mobileNav.classList.remove('active');
+                mobileNav.style.display = 'none';
             }
-            
-            // Remove active classes
-            menuToggle.classList.remove('active');
-            mobileNav.classList.remove('active');
-            overlay.classList.remove('active');
-            
-            console.log('✅ Menú cerrado correctamente');
-            
-            // Hide overlay after animation
-            setTimeout(() => {
-                overlay.style.display = 'none';
-                console.log('🫥 Overlay ocultado');
-            }, 300);
         }
 
         // Event listeners para el dropdown
