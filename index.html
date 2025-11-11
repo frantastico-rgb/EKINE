@@ -763,6 +763,71 @@
                 letter-spacing: 2px;
             }
         }
+
+        /* Estilos para la nueva sección Ecosistema */
+        .ecosystem-section {
+            background-color: #0a0a0a; /* Un fondo ligeramente diferente para destacar */
+            padding: 60px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .ecosystem-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .ecosystem-pillar {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 340px;
+            flex: 1;
+            min-width: 280px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .ecosystem-pillar:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .ecosystem-pillar h3 {
+            font-size: 1.5rem;
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+
+        .ecosystem-pillar p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        /* Iconos (usaremos emojis por simplicidad, pero se pueden reemplazar por SVGs) */
+        .ecosystem-pillar::before {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 20px;
+            line-height: 1;
+        }
+
+        .ecosystem-pillar.empresas::before {
+            content: '🚀'; /* Cohete para pioneros */
+        }
+
+        .ecosystem-pillar.academia::before {
+            content: '🏛️'; /* Edificio clásico para academia */
+        }
+
+        .ecosystem-pillar.gobierno::before {
+            content: '🌐'; /* Globo para alcance gubernamental */
+        }
     </style>
 </head>
 <body>
@@ -782,6 +847,7 @@
         <!-- Navegación normal para desktop -->
         <nav>
             <ul>
+                <li><a href="#ecosistema">El Ecosistema</a></li>
                 <li><a href="#identidad">Identidad</a></li>
                 <li><a href="#exportacion">Exportación</a></li>
                 <li><a href="#cultura">Cultura</a></li>
@@ -806,6 +872,7 @@
     <!-- Navegación móvil -->
     <nav class="mobile-nav">
         <ul>
+            <li><a href="#ecosistema">El Ecosistema</a></li>
             <li><a href="#identidad">Identidad</a></li>
             <li><a href="#exportacion">Exportación</a></li>
             <li><a href="#cultura">Cultura</a></li>
@@ -818,9 +885,27 @@
 
     <section class="hero">
         <div>
-            <h1>¿Tu Producto se Confunde con la Competencia?</h1>
-            <p><strong>Convierte tu marca en Premium Internacional</strong> con nuestra metodología única: Cine + Software que certifica calidad, optimiza procesos de exportación y abre nuevos mercados globales.</p>
-            <a href="#servicios" class="btn">Ver Cómo Funciona</a>
+            <h1>¿Y si tu Mayor Activo es la Historia que Aún no Cuentas?</h1>
+            <p>Unimos cine y software para convertir el origen de tu producto en tu diferenciador más potente. <strong>Buscamos empresas, instituciones y líderes pioneros</strong> para co-crear el futuro de la exportación colombiana.</p>
+            <a href="#ecosistema" class="btn">Únete al Ecosistema</a>
+        </div>
+    </section>
+
+    <section id="ecosistema" class="ecosystem-section">
+        <h2 class="section-title">Un Ecosistema para Co-Crear Valor</h2>
+        <div class="ecosystem-container">
+            <div class="ecosystem-pillar empresas">
+                <h3>Empresas Pioneras</h3>
+                <p>Para las marcas que no solo venden un producto, sino que lideran con su historia y se atreven a innovar.</p>
+            </div>
+            <div class="ecosystem-pillar academia">
+                <h3>Academia y Cultura</h3>
+                <p>Para las mentes que conectan arte, narrativa y economía para generar impacto y conocimiento.</p>
+            </div>
+            <div class="ecosystem-pillar gobierno">
+                <h3>Líderes y Gobierno</h3>
+                <p>Para los visionarios que construyen una marca país basada en la innovación, la cultura y la identidad.</p>
+            </div>
         </div>
     </section>
 
