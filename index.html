@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -1370,25 +1370,12 @@
             const dropdown = document.querySelector('.mobile-nav');
             
             if (hamburger && dropdown) {
-                hamburger.classList.remove('show'); // ✅ CORREGIDO: usar .show
+                hamburger.classList.remove('show');
                 dropdown.classList.remove('show');
                 console.log('❌ Menú cerrado por función externa');
             }
         }
             
-            if (isActive) {
-                // Cerrar
-                console.log('� Cerrando menú');
-                mobileNav.classList.remove('active');
-                menuToggle.classList.remove('active');
-                mobileNav.style.display = 'none';
-            } else {
-                // Abrir
-                console.log('� Abriendo menú');
-                mobileNav.classList.add('active');
-                menuToggle.classList.add('active');
-                mobileNav.style.display = 'block';
-                
         // Event listeners para el dropdown
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 DOM cargado - Inicializando menú móvil');
