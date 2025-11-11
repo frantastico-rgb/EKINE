@@ -1295,7 +1295,7 @@
             breakdown.style.transform = 'translateY(10px)';
         }
 
-        // MENÚ MÓVIL - VERSIÓN FINAL ULTRA SIMPLE
+        // MENÚ MÓVIL - VERSIÓN CORREGIDA
         function toggleMobileMenu() {
             console.log('🍔 CLICK detectado - Función llamada');
             
@@ -1312,19 +1312,19 @@
                 return;
             }
             
-            // Usar la clase 'show' en lugar de 'active' para el dropdown
+            // Usar la clase 'show' PARA AMBOS elementos
             const estaAbierto = dropdown.classList.contains('show');
             console.log('📱 Estado actual:', estaAbierto ? 'ABIERTO' : 'CERRADO');
             
             if (estaAbierto) {
                 // CERRAR
                 console.log('⬇️ Cerrando menú...');
-                hamburger.classList.remove('active');
+                hamburger.classList.remove('show'); // ✅ CORREGIDO: usar .show
                 dropdown.classList.remove('show');
             } else {
                 // ABRIR
                 console.log('⬆️ Abriendo menú...');
-                hamburger.classList.add('active');
+                hamburger.classList.add('show'); // ✅ CORREGIDO: usar .show
                 dropdown.classList.add('show');
                 
                 // Verificar después de 100ms
@@ -1343,7 +1343,7 @@
             const dropdown = document.querySelector('.mobile-nav');
             
             if (hamburger && dropdown) {
-                hamburger.classList.remove('active');
+                hamburger.classList.remove('show'); // ✅ CORREGIDO: usar .show
                 dropdown.classList.remove('show');
                 console.log('❌ Menú cerrado por función externa');
             }
