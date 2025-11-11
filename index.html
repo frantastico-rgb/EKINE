@@ -1000,7 +1000,7 @@
                     
                     if (targetElement) {
                         const headerHeight = document.querySelector('header').offsetHeight;
-                        const offsetPosition = targetElement.offsetTop - headerHeight - 40; // ✅ AUMENTADO: 40px adicional de espacio
+                        const offsetPosition = targetElement.offsetTop - headerHeight - 60; // ✅ AUMENTADO: 60px adicional de espacio
                         
                         window.scrollTo({
                             top: offsetPosition,
@@ -1218,6 +1218,22 @@
             const roiEl = document.getElementById('roiResult');
             const roiBar = document.getElementById('roiBar');
 
+            console.log('🔍 Elementos encontrados:', {
+                breakdown: !!breakdown,
+                costsEl: !!costsEl,
+                tangibleEl: !!tangibleEl,
+                intangibleEl: !!intangibleEl,
+                totalEl: !!totalEl,
+                roiEl: !!roiEl,
+                roiBar: !!roiBar
+            });
+
+            if (!breakdown || !costsEl || !tangibleEl || !intangibleEl || !totalEl || !roiEl || !roiBar) {
+                console.error('❌ Faltan elementos del DOM para ROI');
+                alert('Error: No se pueden encontrar los elementos necesarios para el cálculo');
+                return;
+            }
+
             // Simple model assumptions - usando números más conservadores
             const costs = Math.round(budget);
             const tangible = Math.round(budget * 1.4); // Reducido de 1.6 a 1.4
@@ -1367,30 +1383,6 @@
                 menuToggle.classList.add('active');
                 mobileNav.style.display = 'block';
                 
-                // Verificar que se aplicó
-                setTimeout(() => {
-                    console.log('Verificación:');
-                    console.log('- display:', getComputedStyle(mobileNav).display);
-                    console.log('- visibility:', getComputedStyle(mobileNav).visibility);
-                    console.log('- opacity:', getComputedStyle(mobileNav).opacity);
-                    console.log('- clase active:', mobileNav.classList.contains('active'));
-                }, 100);
-            }
-        }
-
-        function closeMobileMenu() {
-            console.log('❌ Cerrando menú (función)');
-            
-            const menuToggle = document.querySelector('.menu-toggle');
-            const mobileNav = document.querySelector('.mobile-nav');
-            
-            if (menuToggle && mobileNav) {
-                menuToggle.classList.remove('active');
-                mobileNav.classList.remove('active');
-                mobileNav.style.display = 'none';
-            }
-        }
-
         // Event listeners para el dropdown
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 DOM cargado - Inicializando menú móvil');
