@@ -801,18 +801,18 @@
     </header>
 
     <!-- Overlay para cerrar el menú móvil -->
-    <div class="mobile-nav-overlay" onclick="closeMobileMenu()"></div>
+    <div class="mobile-nav-overlay"></div>
     
     <!-- Navegación móvil -->
     <nav class="mobile-nav">
         <ul>
-            <li><a href="#identidad" onclick="closeMobileMenu()">Identidad</a></li>
-            <li><a href="#exportacion" onclick="closeMobileMenu()">Exportación</a></li>
-            <li><a href="#cultura" onclick="closeMobileMenu()">Cultura</a></li>
-            <li><a href="#servicios" onclick="closeMobileMenu()">Servicios</a></li>
-            <li><a href="#trials" onclick="closeMobileMenu()">Trials</a></li>
-            <li><a href="#roi" onclick="closeMobileMenu()">ROI</a></li>
-            <li><a href="#consulta" onclick="closeMobileMenu()">Consulta</a></li>
+            <li><a href="#identidad">Identidad</a></li>
+            <li><a href="#exportacion">Exportación</a></li>
+            <li><a href="#cultura">Cultura</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#trials">Trials</a></li>
+            <li><a href="#roi">ROI</a></li>
+            <li><a href="#consulta">Consulta</a></li>
         </ul>
     </nav>
 
@@ -1322,70 +1322,74 @@
             breakdown.style.transform = 'translateY(10px)';
         }
 
-        // MENÚ MÓVIL - LÓGICA CENTRALIZADA Y ROBUSTA
-        function toggleMobileMenu() {
-            const hamburger = document.querySelector('.menu-toggle');
-            const dropdown = document.querySelector('.mobile-nav');
-            const overlay = document.querySelector('.mobile-nav-overlay');
-            
-            if (!hamburger || !dropdown || !overlay) return;
-
-            const estaAbierto = dropdown.classList.contains('show');
-            
-            if (estaAbierto) {
-                hamburger.classList.remove('show');
-                dropdown.classList.remove('show');
-                overlay.classList.remove('active');
-                overlay.style.display = 'none';
-            } else {
-                hamburger.classList.add('show');
-                dropdown.classList.add('show');
-                overlay.style.display = 'block';
-                // Forzar un reflujo para que la transición de opacidad funcione
-                setTimeout(() => overlay.classList.add('active'), 10);
-            }
-        }
-
-        function closeMobileMenu() {
-            const hamburger = document.querySelector('.menu-toggle');
-            const dropdown = document.querySelector('.mobile-nav');
-            const overlay = document.querySelector('.mobile-nav-overlay');
-            
-            if (hamburger && dropdown && overlay) {
-                hamburger.classList.remove('show');
-                dropdown.classList.remove('show');
-                overlay.classList.remove('active');
-                overlay.style.display = 'none';
-            }
-        }
-            
-        // Event listeners centralizados para el menú
+        // MENÚ MÓVIL - LÓGICA 100% CENTRALIZADA Y A PRUEBA DE CONFLICTOS
         document.addEventListener('DOMContentLoaded', function() {
             const menuToggle = document.querySelector('.menu-toggle');
-            if (menuToggle) {
-                menuToggle.addEventListener('click', function(e) {
-                    e.stopPropagation(); // Previene que el clic se propague al documento
-                    toggleMobileMenu();
-                });
+            const mobileNav = document.querySelector('.mobile-nav');
+            const overlay = document.querySelector('.mobile-nav-overlay');
+
+            if (!menuToggle || !mobileNav || !overlay) {
+                console.error('Elementos del menú móvil no encontrados.');
+                return;
             }
 
-            // Cerrar menú con ESC
+            function openMenu() {
+                menuToggle.classList.add('show');
+                mobileNav.classList.add('show');
+                overlay.style.display = 'block';
+                setTimeout(() => overlay.classList.add('active'), 10); // Forzar transición
+                document.body.style.overflow = 'hidden'; // Evitar scroll del body
+            }
+
+            function closeMenu() {
+                menuToggle.classList.remove('show');
+                mobileNav.classList.remove('show');
+                overlay.classList.remove('active');
+                // Esperar a que la transición de opacidad termine para ocultar
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 300);
+                document.body.style.overflow = ''; // Restaurar scroll
+            }
+
+            // 1. Abrir/Cerrar con el botón hamburguesa
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const estaAbierto = mobileNav.classList.contains('show');
+                if (estaAbierto) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            });
+
+            // 2. Cerrar al hacer clic en un enlace del menú
+            mobileNav.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    closeMenu();
+                    // El smooth scroll ya se maneja en otro listener, no es necesario duplicar
+                }
+            });
+
+            // 3. Cerrar al hacer clic en el overlay
+            overlay.addEventListener('click', closeMenu);
+
+            // 4. Cerrar con la tecla ESC (manejador de eventos unificado)
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     const modal = document.getElementById('modal-overlay');
-                    const mobileNav = document.querySelector('.mobile-nav');
                     if (modal && modal.classList.contains('open')) {
                         closeModal();
-                    } else if (mobileNav && mobileNav.classList.contains('show')) {
-                        closeMobileMenu();
+                    } else if (mobileNav.classList.contains('show')) {
+                        closeMenu();
                     }
                 }
             });
 
-            // Cerrar menú al redimensionar la ventana a desktop
+            // 5. Cerrar al redimensionar la ventana a tamaño de escritorio
             window.addEventListener('resize', () => {
-                if (window.innerWidth > 800) {
-                    closeMobileMenu();
+                if (window.innerWidth > 800 && mobileNav.classList.contains('show')) {
+                    closeMenu();
                 }
             });
         });
