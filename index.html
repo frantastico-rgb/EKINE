@@ -330,12 +330,12 @@
             background: #FFD700;
         }
         
-        /* Panel de navegación móvil - Dropdown vertical simplificado (SOLO MÓVIL) */
+        /* Panel de navegación móvil - VERSIÓN FINAL SIMPLIFICADA */
         .mobile-nav {
             position: absolute;
-            top: 100%; /* Justo debajo del header */
-            right: 10px; /* Alineado con el botón hamburguesa */
-            width: 200px; /* Más compacto */
+            top: 100%;
+            right: 10px;
+            width: 220px;
             background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(15px);
             z-index: 1000;
@@ -343,30 +343,23 @@
             border: 2px solid #FFD700;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
             
-            /* Estados de visibilidad - SIMPLIFICADO */
-            display: none; /* Oculto por defecto */
+            /* Estado inicial: INVISIBLE */
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
         }
         
-        .mobile-nav.active {
-            display: block !important; /* Mostrar cuando está activo */
-            animation: dropdownSlide 0.3s ease-out;
-        }
-        
-        /* Animación de aparición */
-        @keyframes dropdownSlide {
-            from {
-                opacity: 0;
-                transform: translateY(-10px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+        /* Estado activo: VISIBLE */
+        .mobile-nav.show {
+            display: block !important;
+            opacity: 1 !important;
+            transform: translateY(0) !important;
         }
         
         .mobile-nav ul {
             list-style: none;
-            padding: 10px 0;
+            padding: 8px 0;
             margin: 0;
         }
         
@@ -376,45 +369,26 @@
         }
         
         .mobile-nav li:last-child {
-            border-bottom: none; /* Quitar borde del último elemento */
+            border-bottom: none;
         }
         
         .mobile-nav a {
             display: block;
             color: #ffffff;
             text-decoration: none;
-            padding: 12px 16px; /* Padding más compacto */
-            font-size: 1rem; /* Tamaño optimizado */
+            padding: 14px 16px;
+            font-size: 1rem;
             font-weight: 500;
             transition: all 0.3s;
-            position: relative;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
             border-radius: 6px;
-            margin: 2px 0; /* Separación entre elementos */
+            margin: 2px 0;
         }
         
-        .mobile-nav a:hover,
-        .mobile-nav a:focus {
+        .mobile-nav a:hover {
             background: linear-gradient(90deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.1));
             color: #FFD700;
             padding-left: 24px;
             transform: translateX(4px);
-        }
-        
-        .mobile-nav a::before {
-            content: '▶';
-            position: absolute;
-            left: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #FFD700;
-            font-size: 0.7rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .mobile-nav a:hover::before {
-            opacity: 1;
         }
         
         /* Overlay para cerrar menú dropdown */
@@ -451,26 +425,12 @@
                 display: flex !important; /* Mostrar SOLO en móvil */
                 flex-shrink: 0;
                 margin-left: 8px;
-                z-index: 1001; /* Por encima del panel de navegación */
-                position: relative; /* Para el dropdown positioning */
+                z-index: 1001;
+                position: relative;
             }
             
             nav {
                 display: none !important; /* Ocultar navbar normal en móvil */
-            }
-            
-            .mobile-nav {
-                display: block; /* Habilitar dropdown en móvil */
-                position: absolute;
-                top: 100%;
-                right: 10px;
-            }
-            
-            /* Forzar que esté visible cuando tenga clase active */
-            .mobile-nav.active {
-                display: block !important;
-                visibility: visible !important;
-                opacity: 1 !important;
             }
             
             /* Optimización header móvil: mantener layout compacto */
@@ -1335,20 +1295,59 @@
             breakdown.style.transform = 'translateY(10px)';
         }
 
-        // Funciones para el menú dropdown móvil (versión súper simple)
+        // MENÚ MÓVIL - VERSIÓN FINAL ULTRA SIMPLE
         function toggleMobileMenu() {
-            console.log('🍔 CLICK en hamburguesa');
+            console.log('🍔 CLICK detectado - Función llamada');
             
-            const mobileNav = document.querySelector('.mobile-nav');
-            const menuToggle = document.querySelector('.menu-toggle');
+            const hamburger = document.querySelector('.menu-toggle');
+            const dropdown = document.querySelector('.mobile-nav');
             
-            if (!mobileNav || !menuToggle) {
+            console.log('Elementos encontrados:', {
+                hamburger: !!hamburger, 
+                dropdown: !!dropdown
+            });
+            
+            if (!hamburger || !dropdown) {
                 console.error('❌ Elementos no encontrados');
                 return;
             }
             
-            const isActive = mobileNav.classList.contains('active');
-            console.log('Estado actual:', isActive);
+            // Usar la clase 'show' en lugar de 'active' para el dropdown
+            const estaAbierto = dropdown.classList.contains('show');
+            console.log('📱 Estado actual:', estaAbierto ? 'ABIERTO' : 'CERRADO');
+            
+            if (estaAbierto) {
+                // CERRAR
+                console.log('⬇️ Cerrando menú...');
+                hamburger.classList.remove('active');
+                dropdown.classList.remove('show');
+            } else {
+                // ABRIR
+                console.log('⬆️ Abriendo menú...');
+                hamburger.classList.add('active');
+                dropdown.classList.add('show');
+                
+                // Verificar después de 100ms
+                setTimeout(() => {
+                    const styles = getComputedStyle(dropdown);
+                    console.log('🔍 Estado final:');
+                    console.log('  - display:', styles.display);
+                    console.log('  - opacity:', styles.opacity);
+                    console.log('  - clase show:', dropdown.classList.contains('show'));
+                }, 100);
+            }
+        }
+
+        function closeMobileMenu() {
+            const hamburger = document.querySelector('.menu-toggle');
+            const dropdown = document.querySelector('.mobile-nav');
+            
+            if (hamburger && dropdown) {
+                hamburger.classList.remove('active');
+                dropdown.classList.remove('show');
+                console.log('❌ Menú cerrado por función externa');
+            }
+        }
             
             if (isActive) {
                 // Cerrar
