@@ -793,7 +793,7 @@
         </nav>
         
         <!-- Botón hamburguesa para móvil -->
-        <button class="menu-toggle" aria-label="Abrir menú de navegación" onclick="toggleMobileMenu()">
+        <button class="menu-toggle" aria-label="Abrir menú de navegación">
             <span></span>
             <span></span>
             <span></span>
@@ -1322,105 +1322,69 @@
             breakdown.style.transform = 'translateY(10px)';
         }
 
-        // MENÚ MÓVIL - VERSIÓN CORREGIDA
+        // MENÚ MÓVIL - LÓGICA CENTRALIZADA Y ROBUSTA
         function toggleMobileMenu() {
-            console.log('🍔 CLICK detectado - Función llamada');
-            
             const hamburger = document.querySelector('.menu-toggle');
             const dropdown = document.querySelector('.mobile-nav');
+            const overlay = document.querySelector('.mobile-nav-overlay');
             
-            console.log('Elementos encontrados:', {
-                hamburger: !!hamburger, 
-                dropdown: !!dropdown
-            });
-            
-            if (!hamburger || !dropdown) {
-                console.error('❌ Elementos no encontrados');
-                return;
-            }
-            
-            // Usar la clase 'show' PARA AMBOS elementos
+            if (!hamburger || !dropdown || !overlay) return;
+
             const estaAbierto = dropdown.classList.contains('show');
-            console.log('📱 Estado actual:', estaAbierto ? 'ABIERTO' : 'CERRADO');
             
             if (estaAbierto) {
-                // CERRAR
-                console.log('⬇️ Cerrando menú...');
-                hamburger.classList.remove('show'); // ✅ CORREGIDO: usar .show
+                hamburger.classList.remove('show');
                 dropdown.classList.remove('show');
+                overlay.classList.remove('active');
+                overlay.style.display = 'none';
             } else {
-                // ABRIR
-                console.log('⬆️ Abriendo menú...');
-                hamburger.classList.add('show'); // ✅ CORREGIDO: usar .show
+                hamburger.classList.add('show');
                 dropdown.classList.add('show');
-                
-                // Verificar después de 100ms
-                setTimeout(() => {
-                    const styles = getComputedStyle(dropdown);
-                    console.log('🔍 Estado final:');
-                    console.log('  - display:', styles.display);
-                    console.log('  - opacity:', styles.opacity);
-                    console.log('  - clase show:', dropdown.classList.contains('show'));
-                }, 100);
+                overlay.style.display = 'block';
+                // Forzar un reflujo para que la transición de opacidad funcione
+                setTimeout(() => overlay.classList.add('active'), 10);
             }
         }
 
         function closeMobileMenu() {
             const hamburger = document.querySelector('.menu-toggle');
             const dropdown = document.querySelector('.mobile-nav');
+            const overlay = document.querySelector('.mobile-nav-overlay');
             
-            if (hamburger && dropdown) {
+            if (hamburger && dropdown && overlay) {
                 hamburger.classList.remove('show');
                 dropdown.classList.remove('show');
-                console.log('❌ Menú cerrado por función externa');
+                overlay.classList.remove('active');
+                overlay.style.display = 'none';
             }
         }
             
-        // Event listeners para el dropdown
+        // Event listeners centralizados para el menú
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 DOM cargado - Inicializando menú móvil');
-            
-            // Verificar que existen los elementos
             const menuToggle = document.querySelector('.menu-toggle');
-            const mobileNav = document.querySelector('.mobile-nav');
-            const overlay = document.querySelector('.mobile-nav-overlay');
-            
-            console.log('🔍 Elementos encontrados:', {
-                menuToggle: !!menuToggle,
-                mobileNav: !!mobileNav,
-                overlay: !!overlay
-            });
-            
-            // Cerrar menú dropdown con ESC
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Previene que el clic se propague al documento
+                    toggleMobileMenu();
+                });
+            }
+
+            // Cerrar menú con ESC
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     const modal = document.getElementById('modal-overlay');
+                    const mobileNav = document.querySelector('.mobile-nav');
                     if (modal && modal.classList.contains('open')) {
                         closeModal();
-                    } else {
-                        const mobileNav = document.querySelector('.mobile-nav');
-                        if (mobileNav && mobileNav.classList.contains('active')) {
-                            closeMobileMenu();
-                        }
+                    } else if (mobileNav && mobileNav.classList.contains('show')) {
+                        closeMobileMenu();
                     }
                 }
             });
 
-            // Cerrar menú dropdown al redimensionar la ventana
+            // Cerrar menú al redimensionar la ventana a desktop
             window.addEventListener('resize', () => {
                 if (window.innerWidth > 800) {
-                    closeMobileMenu();
-                }
-            });
-
-            // Cerrar dropdown al hacer click fuera del menú
-            document.addEventListener('click', (e) => {
-                const menuToggle = document.querySelector('.menu-toggle');
-                const mobileNav = document.querySelector('.mobile-nav');
-                
-                if (menuToggle && mobileNav && 
-                    !menuToggle.contains(e.target) && 
-                    !mobileNav.contains(e.target)) {
                     closeMobileMenu();
                 }
             });
