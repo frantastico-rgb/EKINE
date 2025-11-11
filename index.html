@@ -310,22 +310,22 @@
         }
         
         /* Animación del hamburger a X mejorada */
-        .menu-toggle.active {
+        .menu-toggle.show {
             background: rgba(255, 215, 0, 0.3);
             border-color: #FFD700;
         }
         
-        .menu-toggle.active span:nth-child(1) {
+        .menu-toggle.show span:nth-child(1) {
             transform: rotate(45deg) translate(5px, 5px);
             background: #FFD700;
         }
         
-        .menu-toggle.active span:nth-child(2) {
+        .menu-toggle.show span:nth-child(2) {
             opacity: 0;
             transform: scale(0);
         }
         
-        .menu-toggle.active span:nth-child(3) {
+        .menu-toggle.show span:nth-child(3) {
             transform: rotate(-45deg) translate(7px, -6px);
             background: #FFD700;
         }
@@ -1000,7 +1000,7 @@
                     
                     if (targetElement) {
                         const headerHeight = document.querySelector('header').offsetHeight;
-                        const offsetPosition = targetElement.offsetTop - headerHeight - 20; // 20px adicional de espacio
+                        const offsetPosition = targetElement.offsetTop - headerHeight - 40; // ✅ AUMENTADO: 40px adicional de espacio
                         
                         window.scrollTo({
                             top: offsetPosition,
@@ -1191,8 +1191,11 @@
 
         // ROI calculator: show breakdown with animation and simple counter
         function calculateROI() {
+            console.log('🧮 calculateROI llamada');
             const budgetInput = document.getElementById('budget').value;
+            console.log('📊 Valor del input:', budgetInput);
             const budget = parseFloat(budgetInput) || 0;
+            console.log('💰 Budget parseado:', budget);
             
             // Validación de entrada
             if (budget <= 0) {
@@ -1204,6 +1207,8 @@
                 alert('El presupuesto ingresado es muy alto. Por favor usa un valor más realista.');
                 return;
             }
+            
+            console.log('✅ Validaciones pasadas, calculando ROI...');
             
             const breakdown = document.getElementById('breakdown');
             const costsEl = document.getElementById('costs');
