@@ -828,6 +828,85 @@
         .ecosystem-pillar.gobierno::before {
             content: '🌐'; /* Globo para alcance gubernamental */
         }
+
+        /* --- ESTILOS PARA FASE 2: MODAL DE PILARES --- */
+        .ecosystem-pillar {
+            cursor: pointer; /* Indicar que los pilares son clicables */
+        }
+
+        .pillar-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85); /* Más oscuro para enfocar */
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000; /* Por encima de todo */
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .pillar-modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .pillar-modal-content {
+            background: #1a1a1a;
+            color: #eee;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .pillar-modal-overlay.show .pillar-modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .pillar-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: #aaa;
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .pillar-modal-close:hover {
+            color: #fff;
+        }
+
+        .pillar-modal-content h3 {
+            font-size: 2rem;
+            color: #FFD700;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .pillar-modal-content p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            color: #ddd;
+        }
+
+        .pillar-modal-content .btn {
+            font-size: 1.1rem;
+            padding: 12px 25px;
+        }
+        /* --- FIN ESTILOS FASE 2 --- */
     </style>
 </head>
 <body>
@@ -894,15 +973,15 @@
     <section id="ecosistema" class="ecosystem-section">
         <h2 class="section-title">Un Ecosistema para Co-Crear Valor</h2>
         <div class="ecosystem-container">
-            <div class="ecosystem-pillar empresas">
+            <div class="ecosystem-pillar empresas" data-pillar="empresas" role="button" tabindex="0">
                 <h3>Empresas Pioneras</h3>
                 <p>Para las marcas que no solo venden un producto, sino que lideran con su historia y se atreven a innovar.</p>
             </div>
-            <div class="ecosystem-pillar academia">
+            <div class="ecosystem-pillar academia" data-pillar="academia" role="button" tabindex="0">
                 <h3>Academia y Cultura</h3>
                 <p>Para las mentes que conectan arte, narrativa y economía para generar impacto y conocimiento.</p>
             </div>
-            <div class="ecosystem-pillar gobierno">
+            <div class="ecosystem-pillar gobierno" data-pillar="gobierno" role="button" tabindex="0">
                 <h3>Líderes y Gobierno</h3>
                 <p>Para los visionarios que construyen una marca país basada en la innovación, la cultura y la identidad.</p>
             </div>
@@ -1050,6 +1129,17 @@
         <p>Contacto: ekineidentidad@gmail.com | dominionnatura@gmail.com | © 2025 EKINE</p>
         <p>Síguenos en redes sociales para más inspiración.</p>
     </footer>
+
+    <!-- --- INICIO MODAL FASE 2: PILARES --- -->
+    <div id="pillar-modal" class="pillar-modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="pillar-modal-content" role="document">
+            <button class="pillar-modal-close" aria-label="Cerrar ventana">×</button>
+            <div id="pillar-modal-body">
+                <!-- El contenido se inyectará aquí dinámicamente -->
+            </div>
+        </div>
+    </div>
+    <!-- --- FIN MODAL FASE 2 --- -->
 
     <!-- Modal overlay for fullscreen forms -->
     <div id="modal-overlay" class="modal-overlay" role="dialog" aria-hidden="true">
@@ -1478,6 +1568,101 @@
                 }
             });
         });
+
+        // --- INICIO LÓGICA FASE 2: MODAL DE PILARES ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const pillarModalOverlay = document.getElementById('pillar-modal');
+            const pillarModalBody = document.getElementById('pillar-modal-body');
+            const pillarModalClose = document.querySelector('.pillar-modal-close');
+            const pillars = document.querySelectorAll('.ecosystem-pillar');
+
+            if (!pillarModalOverlay || !pillars.length) {
+                console.error('Elementos para el modal de pilares no encontrados.');
+                return;
+            }
+
+            const modalContent = {
+                empresas: {
+                    title: 'Para Empresas Pioneras',
+                    text: 'Tu historia es un activo estratégico. La transformamos en una narrativa premium que abre mercados, justifica un valor superior y te diferencia de la competencia. Convierte tu origen en tu mayor ventaja competitiva.',
+                    buttonText: 'Solicita una Consulta Estratégica',
+                    href: '#consulta'
+                },
+                academia: {
+                    title: 'Para Academia y Cultura',
+                    text: 'Proponemos un puente entre la narrativa cinematográfica y la economía. Unimos investigación, arte y mercado para generar proyectos de alto impacto que produzcan conocimiento y valor cultural tangible.',
+                    buttonText: 'Propón una Colaboración',
+                    href: '#trials'
+                },
+                gobierno: {
+                    title: 'Para Líderes y Gobierno',
+                    text: 'Construyamos juntos una marca país innovadora. Usamos el storytelling y la tecnología para proyectar una imagen de Colombia basada en la resiliencia, la identidad y la calidad, fortaleciendo la presencia internacional.',
+                    buttonText: 'Inicia una Conversación Institucional',
+                    href: '#consulta'
+                }
+            };
+
+            function openPillarModal(pillarType) {
+                const content = modalContent[pillarType];
+                if (!content) return;
+
+                pillarModalBody.innerHTML = `
+                    <h3>${content.title}</h3>
+                    <p>${content.text}</p>
+                    <a href="${content.href}" class="btn pillar-action-btn">${content.buttonText}</a>
+                `;
+
+                pillarModalOverlay.classList.add('show');
+                pillarModalOverlay.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+
+                // Añadir listener al nuevo botón
+                const actionBtn = pillarModalBody.querySelector('.pillar-action-btn');
+                if (actionBtn) {
+                    actionBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        closePillarModal();
+                        
+                        // Reutilizar la lógica de smooth scroll
+                        const targetElement = document.querySelector(this.getAttribute('href'));
+                        if (targetElement) {
+                            const headerHeight = document.querySelector('header').offsetHeight;
+                            const offsetPosition = targetElement.offsetTop - headerHeight - 60;
+                            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                        }
+                    });
+                }
+            }
+
+            function closePillarModal() {
+                pillarModalOverlay.classList.remove('show');
+                pillarModalOverlay.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+            }
+
+            pillars.forEach(pillar => {
+                pillar.addEventListener('click', function() {
+                    openPillarModal(this.dataset.pillar);
+                });
+                pillar.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openPillarModal(this.dataset.pillar);
+                    }
+                });
+            });
+
+            pillarModalClose.addEventListener('click', closePillarModal);
+            pillarModalOverlay.addEventListener('click', function(e) {
+                if (e.target === pillarModalOverlay) {
+                    closePillarModal();
+                }
+            });
+            
+            // Extender la tecla ESC para que también cierre este modal
+            // (El listener ya existe, solo necesita saber de este nuevo modal)
+        });
+        // --- FIN LÓGICA FASE 2 ---
     </script>
 </body>
 </html>
