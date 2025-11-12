@@ -1232,8 +1232,9 @@
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            align-items: center;
+            /* Dos columnas fluidas para texto/enlaces y una columna fija para el logo */
+            grid-template-columns: 1fr 1fr 280px;
+            align-items: start; /* alinear al inicio para balance visual */
             gap: 40px;
         }
         .footer-left {
@@ -1250,9 +1251,9 @@
             align-items: center;
         }
         .footer-logo {
-            height: 180px; /* Logo mucho más grande para ocupar un tercio real del footer */
+            height: 220px; /* aumentado ligeramente para mayor presencia en desktop */
             width: auto;
-            max-width: 200px; /* Límite de ancho para mantener proporciones */
+            max-width: 260px; /* Límite de ancho aumentado para mantener proporciones */
             object-fit: contain;
             border-radius: 12px;
             filter: drop-shadow(0 4px 12px rgba(255,215,0,0.3));
@@ -1273,17 +1274,37 @@
             color: #95A5A6;
             margin: 12px 0;
         }
+        /* Widget pequeño para mostrar/ocultar enlace externo en el footer */
+        .social-widget { margin-top: 8px; }
+        .social-widget a {
+            color: #FFD700;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        .social-widget .btn { padding: 8px 12px; font-size: 0.95rem; }
         .footer-copyright {
             font-size: 0.9em;
             color: #BDC3C7;
             margin: 16px 0 0 0;
             font-style: italic;
         }
-        .footer-subtitle {
+            .footer-subtitle {
             font-size: 1em;
             color: #FFD700;
             margin: 8px 0;
             font-weight: 500;
+        }
+        /* Mejor balance y espaciado interno para el footer */
+        .footer-left, .footer-center, .footer-right {
+            padding: 8px 12px;
+            box-sizing: border-box;
+        }
+        .footer-left { color: #ECF0F1; }
+        .footer-center { display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; }
+        .footer-right { display:flex; align-items:center; justify-content:flex-end; }
+        @media (max-width: 768px) {
+            .footer-content { grid-template-columns: 1fr; text-align: center; }
+            .footer-right { justify-content: center; }
         }
         @media (max-width: 768px) {
             .footer-content { 
@@ -1294,8 +1315,8 @@
             .footer-left { text-align: center; }
             .footer-right { justify-content: center; }
             .footer-logo { 
-                height: 140px; /* Logo grande también en móviles */
-                max-width: 160px;
+                height: 180px; /* tamaño ligeramente mayor en móvil para mejor visibilidad */
+                max-width: 200px;
             }
             footer {
                 padding: 40px 20px;
@@ -1410,7 +1431,7 @@
             </div>
             <div class="ecosystem-pillar gobierno" data-pillar="gobierno" role="button" tabindex="0">
                 <h3>Líderes y Gobierno</h3>
-                <p>Para los visionarios que construyen una marca país basada en la innovación, la cultura y la identidad.</p>
+                <p>Para los visionarios que construyen una marca territorio basada en la innovación, la cultura y la identidad.</p>
             </div>
         </div>
     </section>
@@ -1421,13 +1442,13 @@
     <div class="card">
             <h3>🎬 + 💻 = Diferenciación Auténtica</h3>
             <p><strong>Posibilidad real:</strong> Empresas que desarrollan storytelling territorial abren oportunidades en mercados premium donde la historia importa tanto como la calidad.</p>
-            <p><em>"Descubrimos que nuestro proceso artesanal era nuestro mayor activo de diferenciación internacional"</em> - Empresario textil participante</p>
+            <p><em>"Descubrimos que nuestro proceso artesanal era nuestro mayor activo de diferenciación internacional"</em> - Empresario frutícola participante</p>
         </div>
     </section>
 
     <section id="exportacion">
         <h2 class="section-title">¿Pierdes Tiempo y Dinero en Auditorías Infinitas?</h2>
-        <p><strong>LA REALIDAD:</strong> Las inspecciones aduaneras pueden retrasar tus exportaciones hasta 3 semanas. <strong>NUESTRA PROPUESTA:</strong> Certificación digital que puede agilizar procesos y validar origen.</p>
+        <p><strong>LA REALIDAD:</strong> Las inspecciones pueden retrasar tus exportaciones hasta 3 semanas. <strong>NUESTRA PROPUESTA:</strong> Certificación digital que puede agilizar procesos y validar origen.</p>
         <p><strong>Certificación que Diferencia tu Marca:</strong> Certificado digital con QR que verifica origen y RSE, con potencial de optimizar inspecciones aduaneras y procesos. Único por combinar emoción (cine) con precisión (software).</p>
         <div class="slider">
             <div class="slider-item">
@@ -1460,7 +1481,7 @@
             </div>
             
             <h4>Logline: Fruta de la Pasión</h4>
-            <p>Descubre la historia completa detrás del proyecto que conecta territorio, cultura y calidad empresarial.</p>
+            <p>Descubre la historia detrás del proyecto que conecta territorio, cultura y calidad empresarial.</p>
             <div class="video-container">
                 <iframe src="https://www.youtube.com/embed/E1cjg6EIsx4" title="Fruta de la Pasión - Logline" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
@@ -1475,7 +1496,7 @@
             <ul>
                 <li><strong>Oro:</strong> Créditos y making-of (Entrevistas y Behind The Scenes BTS).</li>
                 <li><strong>Platino:</strong> Emplazamiento en diálogo, clips para RSE.</li>
-                <li><strong>Diamante:</strong> "Presentado por [Marca]", licencia ilimitada.</li>
+                <li><strong>Diamante:</strong> "Presentado por [Marca]", con licencia cíclica.</li>
             </ul>
         </div>
         <div class="card">
@@ -1498,8 +1519,8 @@
     </section>
 
     <section id="consulta">
-        <h2 class="section-title">Solicita una Consulta Estratégica</h2> 
-        <p>¿Tienes preguntas sobre nuestros servicios, gamas o presupuestos? Haz clic para expandir el formulario.</p>
+        <h2 class="section-title">Nivel Institucional y Empresarial:  Consulta Estratégica</h2> 
+        <p>¿Tienes preguntas sobre nuestros servicios, gamas o esquemas de patrocinio? Haz clic para expandir el formulario.</p>
         <div class="accordion">
             <div class="accordion-header consulta" role="button" tabindex="0" aria-controls="consulta-content" aria-expanded="false" onclick="toggleAccordion('consulta-content', this)">Formulario de Consulta Estratégica</div>
             <div id="consulta-content" class="accordion-content">
@@ -1515,8 +1536,8 @@
     </section>
 
     <section id="trials">
-        <h2 class="section-title">Pruebas Gratuitas para Niveles Bajos</h2>
-        <p>Descubre nuestros servicios sin compromiso. Haz clic para expandir el formulario.</p>
+        <h2 class="section-title"> Nivel Artistas y Desarrolladores</h2>
+        <p>Descubre cómo puedes aportar tu talento y desarrollar tu potencial. Haz clic para expandir el formulario.</p>
         <div class="accordion">
             <div class="accordion-header trial" role="button" tabindex="0" aria-controls="trials-content" aria-expanded="false" onclick="toggleAccordion('trials-content', this)">Proponer Colaboración Artística o Cultural</div>
             <div id="trials-content" class="accordion-content">
@@ -1562,7 +1583,14 @@
                 <p class="footer-contact">Contacto:<br>
                 ekineidentidad@gmail.com<br>
                 dominionnatura@gmail.com</p>
-                <p class="footer-social">Síguenos en redes sociales para más inspiración.</p>
+
+                <div class="social-widget" aria-live="polite">
+                    <button class="btn" id="social-toggle" onclick="(function(){var c=document.getElementById('social-content'); if(!c) return; if(c.style.display==='none' || c.style.display===''){ c.style.display='block'; this.textContent='Ocultar enlace'; } else { c.style.display='none'; this.textContent='Ver enlace'; } }).call(this)">Ver enlace</button>
+                    <div id="social-content" style="display:none; margin-top:8px;">
+                        <a href="https://ekineidentidad.blogspot.com/p/mision-ekine-transformar-el-origen-y.html" target="_blank" rel="noopener noreferrer">Misión EKINE — Transformar el origen y los procesos productivos</a>
+                    </div>
+                </div>
+
                 <p class="footer-copyright">© 2025 EKINE - Inspirando Calidad y Cultura</p>
             </div>
             <div class="footer-center">
