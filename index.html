@@ -1111,6 +1111,419 @@
             text-shadow: 0 1px 2px rgba(33,150,243,0.1);
         }
 
+        /* Modal fullscreen for forms */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+        .modal-overlay.open { display:flex; }
+        .modal-content {
+            width: 100%;
+            max-width: 1100px;
+            height: 90vh;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        .modal-close {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 2;
+        }
+        .modal-content iframe { width:100%; height:100%; border:none; }
+        /* asegurar que el contenido esté por encima de la marca de agua */
+        section, .card, footer {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Container responsive para videos de YouTube */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 56.25%; /* Aspect ratio 16:9 (9/16 = 0.5625) */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 12px;
+        }
+        
+        /* Estilo cinematográfico para el título EKINE */
+        .cinematic-title {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 2.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FF6B35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 3px;
+            margin: 0;
+            position: relative;
+        }
+        
+        .cinematic-title::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -10px;
+            right: -10px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+            transform: translateY(-50%);
+            opacity: 0.6;
+            z-index: -1;
+        }
+        
+        /* Ajuste para móvil del título */
+        @media (max-width: 800px) {
+            .cinematic-title {
+                font-size: 2.2rem;
+                letter-spacing: 2px;
+            }
+        }
+
+        /* Estilos para la nueva sección Ecosistema */
+        .ecosystem-section {
+            background-color: #0a0a0a; /* Un fondo ligeramente diferente para destacar */
+            padding: 60px 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .ecosystem-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .ecosystem-pillar {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 340px;
+            flex: 1;
+            min-width: 280px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .ecosystem-pillar:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .ecosystem-pillar h3 {
+            font-size: 1.5rem;
+            color: #FFD700;
+            margin-bottom: 15px;
+        }
+
+        .ecosystem-pillar p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        /* Iconos (usaremos emojis por simplicidad, pero se pueden reemplazar por SVGs) */
+        .ecosystem-pillar::before {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 20px;
+            line-height: 1;
+        }
+
+        .ecosystem-pillar.empresas::before {
+            content: '🚀'; /* Cohete para pioneros */
+        }
+
+        .ecosystem-pillar.academia::before {
+            content: '🏛️'; /* Edificio clásico para academia */
+        }
+
+        .ecosystem-pillar.gobierno::before {
+            content: '🌐'; /* Globo para alcance gubernamental */
+        }
+
+        /* --- ESTILOS PARA FASE 2: MODAL DE PILARES --- */
+        .ecosystem-pillar {
+            cursor: pointer; /* Indicar que los pilares son clicables */
+        }
+
+        .pillar-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85); /* Más oscuro para enfocar */
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000; /* Por encima de todo */
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .pillar-modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .pillar-modal-content {
+            background: #1a1a1a;
+            color: #eee;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .pillar-modal-overlay.show .pillar-modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        .pillar-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: #aaa;
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .pillar-modal-close:hover {
+            color: #fff;
+        }
+
+        .pillar-modal-content h3 {
+            font-size: 2rem;
+            color: #FFD700;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .pillar-modal-content p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            color: #ddd;
+        }
+
+        .pillar-modal-content .btn {
+            font-size: 1.1rem;
+            padding: 12px 25px;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px; /* Espacio entre logos y título */
+        }
+
+        .slider-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #FFD700;
+        }
+        /* --- FIN ESTILOS FASE 2 --- */
+
+        /* Comentarios EKINE (Cusdis) */
+        .comentarios-box {
+            background: #fff !important;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(33,150,243,0.12);
+            max-width: 700px;
+            margin: 48px auto 32px auto;
+            padding: 32px 24px 24px 24px;
+            border: 2px solid #2196F3;
+            position: relative;
+            z-index: 2;
+            overflow: visible;
+        }
+        .comentarios-box h2 {
+            color: #2196F3;
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 2em;
+            text-align: center;
+        }
+        .comentarios-box p {
+            text-align: center;
+        }
+        #cusdis_thread {
+            background: #fff !important;
+            padding: 20px !important;
+            border-radius: 12px !important;
+            margin: 16px 0 !important;
+            box-shadow: 0 2px 12px rgba(33,150,243,0.08) !important;
+        }
+        #cusdis_thread input, #cusdis_thread textarea {
+            border-radius: 8px !important;
+            border: 2px solid #2196F3 !important;
+            padding: 12px !important;
+            margin-bottom: 12px !important;
+            font-size: 1em !important;
+            background: #f0f7ff !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            transition: all 0.3s ease !important;
+            opacity: 1 !important;
+            color: #333 !important;
+        }
+        .comentarios-box #cusdis_thread input, .comentarios-box #cusdis_thread textarea {
+            border-radius: 8px !important;
+            border: 2px solid #2196F3 !important;
+            padding: 12px !important;
+            margin-bottom: 12px !important;
+            font-size: 1em !important;
+            background: #f0f7ff !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            transition: all 0.3s ease !important;
+            opacity: 1 !important;
+            color: #333 !important;
+        }
+        #cusdis_thread input:hover, #cusdis_thread textarea:hover,
+        .comentarios-box #cusdis_thread input:hover, .comentarios-box #cusdis_thread textarea:hover {
+            background: #ffffff !important;
+            border-color: #FFD700 !important;
+            box-shadow: 0 2px 8px rgba(255,215,0,0.3) !important;
+            transform: translateY(-1px) !important;
+        }
+        #cusdis_thread input:focus, #cusdis_thread textarea:focus,
+        .comentarios-box #cusdis_thread input:focus, .comentarios-box #cusdis_thread textarea:focus {
+            outline: none !important;
+            border-color: #4CAF50 !important;
+            background: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(76,175,80,0.3) !important;
+        }
+        /* Placeholders visibles y suaves */
+        #cusdis_thread input::placeholder, 
+        #cusdis_thread textarea::placeholder,
+        .comentarios-box #cusdis_thread input::placeholder, 
+        .comentarios-box #cusdis_thread textarea::placeholder {
+            color: #999999 !important;
+            opacity: 1 !important;
+            font-style: italic !important;
+        }
+        
+        /* Compatibilidad con todos los navegadores para placeholders */
+        #cusdis_thread input::-webkit-input-placeholder,
+        #cusdis_thread textarea::-webkit-input-placeholder {
+            color: #999999 !important;
+            opacity: 1 !important;
+        }
+        
+        #cusdis_thread input::-moz-placeholder,
+        #cusdis_thread textarea::-moz-placeholder {
+            color: #999999 !important;
+            opacity: 1 !important;
+        }
+        
+        #cusdis_thread input:-ms-input-placeholder,
+        #cusdis_thread textarea:-ms-input-placeholder {
+            color: #999999 !important;
+            opacity: 1 !important;
+        }
+        /* Selector aún más específico para sobrescribir Cusdis */
+        .comentarios-box .cusdis input[type="text"], 
+        .comentarios-box .cusdis input[type="email"], 
+        .comentarios-box .cusdis textarea {
+            background: #f0f7ff !important;
+            border: 2px solid #2196F3 !important;
+            opacity: 1 !important;
+        }
+        #cusdis_thread button {
+            background: #FFD700 !important;
+            color: #333 !important;
+            border-radius: 8px !important;
+            border: none !important;
+            padding: 12px 28px !important;
+            font-weight: bold !important;
+            font-size: 1.1em !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            margin: 8px 8px 8px 0 !important;
+            box-shadow: 0 4px 12px rgba(255,215,0,0.3) !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+        }
+        #cusdis_thread button:hover {
+            background: #2196F3 !important;
+            color: #fff !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(33,150,243,0.4) !important;
+        }
+        /* Hacer que el botón Comment sea más prominente */
+        #cusdis_thread button:first-of-type {
+            background: #4CAF50 !important;
+            box-shadow: 0 4px 12px rgba(76,175,80,0.3) !important;
+        }
+        #cusdis_thread button:first-of-type:hover {
+            background: #2196F3 !important;
+            box-shadow: 0 6px 16px rgba(33,150,243,0.4) !important;
+        }
+        .comentarios-frase {
+            text-align: center;
+            margin: 32px 0 16px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(33,150,243,0.1));
+            border-radius: 12px;
+            border: 1px solid rgba(33,150,243,0.2);
+        }
+        .comentarios-frase p.frase-cierre {
+            margin: 0;
+            font-style: italic;
+            font-size: 1.3em;
+            color: #2196F3;
+            text-align: center;
+            opacity: 1;
+            font-weight: 500;
+            line-height: 1.4;
+            text-shadow: 0 1px 2px rgba(33,150,243,0.1);
+        }
+
         /* Modal de Misión */
         .mision-modal {
             display: none;
@@ -1301,14 +1714,231 @@
                 padding: 40px 20px;
             }
         }
+
+        /* Modal de Bienvenida EKINE */
+        .welcome-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(33, 150, 243, 0.85);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s;
+        }
+        .welcome-modal-content {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            padding: 36px 28px 28px 28px;
+            max-width: 420px;
+            width: 95vw;
+            text-align: center;
+            position: relative;
+            animation: fadeIn 0.7s;
+        }
+        .welcome-modal-content h2 {
+            color: #2196F3;
+            margin-bottom: 18px;
+        }
+        .welcome-video-container {
+            margin-bottom: 18px;
+        }
+        .welcome-video-container iframe {
+            width: 100%;
+            max-width: 380px;
+            height: 215px;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(33,150,243,0.12);
+        }
+        .welcome-phrase {
+            font-style: italic;
+            color: #4CAF50;
+            margin: 18px 0 24px 0;
+            font-size: 1.1em;
+        }
+        .welcome-close {
+            position: absolute;
+            top: 12px; right: 16px;
+            background: #f44336;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 16px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .welcome-close:hover {
+            background: #b71c1c;
+        }
+        #welcome-enter {
+            background: #2196F3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 32px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s;
+        }
+        #welcome-enter:hover {
+            background: #1769aa;
+        }
+        @media (max-width: 600px) {
+            .welcome-modal-content {
+                padding: 18px 4vw 18px 4vw;
+            }
+            .welcome-video-container iframe {
+                height: 180px;
+            }
+        }
     </style>
+    <script>
+        // Modal de bienvenida EKINE
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = document.getElementById('welcome-modal');
+            var btnEnter = document.getElementById('welcome-enter');
+            var btnExit = document.getElementById('welcome-exit');
+            // Bloquear scroll mientras el modal está abierto
+            document.body.style.overflow = 'hidden';
+            btnEnter.addEventListener('click', function() {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            });
+            btnExit.addEventListener('click', function() {
+                window.location.href = 'https://www.google.com'; // Cambia por la URL de salida deseada
+            });
+            // Cerrar con ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display !== 'none') {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+    </script>
 </head>
 <body>
-    <!-- Marca de agua SVG: baja opacidad, centrada como fondo decorativo -->
-    <div class="watermark" aria-hidden="true">
-        <!-- Marca de agua: usar el nuevo logo EKINE -->
-        <img src="ekine logo.jpg" alt="EKINE logo" class="watermark-img">
+    <!-- Modal de Bienvenida EKINE -->
+    <div id="welcome-modal" class="welcome-modal-overlay" tabindex="-1" aria-modal="true" role="dialog">
+        <div class="welcome-modal-content">
+            <button class="welcome-close" id="welcome-exit">Salir</button>
+            <h2>¡Bienvenido a EKINE!</h2>
+            <div class="welcome-video-container">
+                <iframe width="420" height="236" src="https://www.youtube.com/embed/QUrdeOXDNWE" title="Video tutorial EKINE" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <p class="welcome-phrase">"En EKINE creemos que la calidad y la cultura transforman realidades. Nuestra misión es inspirar, conectar y elevar el potencial de cada historia."</p>
+            <button class="btn" id="welcome-enter">Ingresar</button>
+        </div>
     </div>
+    <style>
+        .welcome-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(33, 150, 243, 0.85);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s;
+        }
+        .welcome-modal-content {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            padding: 36px 28px 28px 28px;
+            max-width: 420px;
+            width: 95vw;
+            text-align: center;
+            position: relative;
+            animation: fadeIn 0.7s;
+        }
+        .welcome-modal-content h2 {
+            color: #2196F3;
+            margin-bottom: 18px;
+        }
+        .welcome-video-container {
+            margin-bottom: 18px;
+        }
+        .welcome-video-container iframe {
+            width: 100%;
+            max-width: 380px;
+            height: 215px;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(33,150,243,0.12);
+        }
+        .welcome-phrase {
+            font-style: italic;
+            color: #4CAF50;
+            margin: 18px 0 24px 0;
+            font-size: 1.1em;
+        }
+        .welcome-close {
+            position: absolute;
+            top: 12px; right: 16px;
+            background: #f44336;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 16px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .welcome-close:hover {
+            background: #b71c1c;
+        }
+        #welcome-enter {
+            background: #2196F3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 32px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s;
+        }
+        #welcome-enter:hover {
+            background: #1769aa;
+        }
+        @media (max-width: 600px) {
+            .welcome-modal-content {
+                padding: 18px 4vw 18px 4vw;
+            }
+            .welcome-video-container iframe {
+                height: 180px;
+            }
+        }
+    </style>
+    <script>
+        // Modal de bienvenida EKINE
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = document.getElementById('welcome-modal');
+            var btnEnter = document.getElementById('welcome-enter');
+            var btnExit = document.getElementById('welcome-exit');
+            // Bloquear scroll mientras el modal está abierto
+            document.body.style.overflow = 'hidden';
+            btnEnter.addEventListener('click', function() {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            });
+            btnExit.addEventListener('click', function() {
+                window.location.href = 'https://www.google.com'; // Cambia por la URL de salida deseada
+            });
+            // Cerrar con ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display !== 'none') {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+    </script>
     <header>
         <div class="header-top">
             <div class="header-brand">
